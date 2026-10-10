@@ -6,7 +6,7 @@
 \renewcommand{\familydefault}{\sfdefault}
 
 % --- Page Layout ---
-\usepackage[a4paper, left=1.9cm, right=1.9cm, top=1.6cm, bottom=1.6cm]{geometry}
+\usepackage[a4paper, left=2cm, right=2cm, top=2cm, bottom=2cm]{geometry}
 \usepackage{needspace}
 \pagestyle{empty}
 
@@ -14,7 +14,6 @@
 \usepackage{xcolor}
 \definecolor{headercolor}{RGB}{44, 62, 80}
 \definecolor{linkcolor}{RGB}{30, 80, 150}
-\definecolor{muted}{RGB}{95, 105, 115}
 
 % --- Private details: the private copy (cv-v12.tex, not published) sets \phone ---
 \usepackage{etoolbox}
@@ -25,6 +24,7 @@
 \hypersetup{
     colorlinks=true,
     linkcolor=linkcolor,
+    filecolor=linkcolor,
     urlcolor=linkcolor,
     pdftitle={Volodymyr Polishchuk - CV},
     pdfauthor={Volodymyr Polishchuk},
@@ -37,91 +37,105 @@
 \usepackage{enumitem}
 
 % --- Section Styling ---
-\titleformat{\section}{\large\bfseries\color{headercolor}}{}{0em}{}[\titlerule]
-\titlespacing{\section}{0pt}{1.6ex}{0.9ex}
+\titleformat{\section}{\Large\bfseries\color{headercolor}}{}{0em}{}[\titlerule]
+\titlespacing{\section}{0pt}{2ex}{1ex}
 
-% --- Paragraphs: ragged right, no hyphenated words ---
+\titleformat{\subsection}{\large\bfseries}{}{0em}{}
+\titlespacing{\subsection}{0pt}{1.5ex}{0.5ex}
+
+% --- Paragraph & List Adjustments ---
 \setlength{\parindent}{0pt}
-\setlength{\parskip}{0.35em}
-\raggedright
-\hyphenpenalty=10000
-\exhyphenpenalty=10000
+\setlength{\parskip}{0.5em}
 \widowpenalty=10000
 \clubpenalty=10000
-\setlist[itemize]{leftmargin=1.1em, nosep, topsep=0.15em, itemsep=0.22em}
+\setlist[itemize]{leftmargin=*, nosep, topsep=0.2em, itemsep=0.3em}
 
-% \role{Company}{Title}{Dates}
-\newcommand{\role}[3]{%
-  \Needspace*{5\baselineskip}\vspace{0.5em}%
-  {\bfseries\color{headercolor}#1}\ |\ {\bfseries #2}\hfill{\color{muted}#3}\par}
-% \project{Name}{what it is}
-\newcommand{\project}[2]{%
-  \Needspace*{3\baselineskip}\vspace{0.15em}%
-  {\bfseries #1}\ifstrempty{#2}{}{ --- #2}\par}
+% \role{Company}{Title}{Location | Dates}
+\newcommand{\role}[3]{\Needspace*{6\baselineskip}\subsection*{#1 | #2}\textbf{#3}\par}
+% \project{Heading}
+\newcommand{\project}[1]{\Needspace*{4\baselineskip}\textbf{#1}\par}
 
 \begin{document}
 
 % ================= HEADER =================
 \begin{center}
-{\LARGE \textbf{VOLODYMYR POLISHCHUK}}\\[0.35em]
-{\large Head of Software \& Autonomy | Systems Architect | GPS-Denied UAV Navigation}\\[0.35em]
+{\Huge \textbf{VOLODYMYR POLISHCHUK}}\\[0.5em]
+{\Large Head of Software \& Autonomy | Systems Architect | GPS-Denied UAV Navigation}\\[0.5em]
 Kyiv, Ukraine |%
 \ifdefempty{\phone}{}{ \phone\ |}%
 {} \href{mailto:v.s.polishchuk@proton.me}{v.s.polishchuk@proton.me} |%
 {} \href{https://volodymyrpolishchuk.github.io}{volodymyrpolishchuk.github.io}
 \end{center}
+\vspace{1em}
 
 % ================= SUMMARY =================
 \section*{SUMMARY}
-Systems architect and tech lead with 19 years in production engineering: Wix's serverless developer platform, used by about 3,000 developers across 2,000+ microservices; a real-time betting engine taking 1M requests/s at peak at Playtech; and payment-network infrastructure at UkrCard. Since 2026 I have headed software and autonomy at Applied Technology Collective, a Ukrainian UAV developer. I joined as its only software engineer, built GPS-denied navigation, now in production, that runs on a \$15 companion computer, with its own flight-controller firmware and simulator, and hired the team. I start from the physics and the measurements, not from frameworks. I build AI-native: I own the architecture, the estimation math and the acceptance tests, and direct AI coding agents as the implementation team.
+Head of software and autonomy and systems architect with 19 years of designing production infrastructure at scale: Wix's serverless platform for about 3,000 developers, Playtech's real-time betting engine at 1M requests per second, and UkrCard's payment network. Since 2026 I have built the software and autonomy function of Applied Technology Collective, a Ukrainian UAV developer, from zero: GPS-denied navigation now in production on a \$15 companion computer, with its own flight-controller firmware and simulator, and the team behind it. I work from first principles, breaking a problem down to its physical, mathematical and computational realities instead of adopting frameworks by analogy. I build AI-native, owning the architecture, the mathematics and the acceptance criteria and directing AI coding agents as the implementation team.
 
 % ================= EXPERIENCE =================
 \section*{EXPERIENCE}
 
-\role{Applied Technology Collective}{Head of Software \& Autonomy}{2026 -- Present}
-Ukrainian developer of strike, loitering-munition and cargo UAVs. I joined as the only software engineer, built the software and autonomy function, and hired two engineers. NADIR is in production, SEXTANT is rolling out, and ORRERY is the standalone simulator both are tested in. All three are my own IP, which the company uses. Code walkthrough on request.
+\role{Applied Technology Collective}{Head of Software \& Autonomy}{Kyiv, Ukraine | 2026 -- Present}
+Ukrainian developer of strike, loitering-munition and cargo UAVs. Joined as the only software engineer, built the software and autonomy function from zero and hired its first two engineers. NADIR, SEXTANT and ORRERY are my own IP, used by the company; code walkthrough on request.
 
-\project{NADIR}{position hold for ArduPilot from one downward camera}
+\project{NADIR --- GPS-Denied Position Hold (In Production)}
 \begin{itemize}
-    \item Goal: reliable position hold without GPS, from one downward camera on a \$15 companion computer.
-    \item Techniques: visual-inertial odometry. Ground features, tracked and corrected for the drone's own rotation, give metric velocity; an anchor on ground features holds position without drift; ArduPilot's EKF fuses both in place of GPS.
+    \item Freed the company's drones from depending on GPS to hold position with a visual-inertial navigation system: one downward camera and the autopilot's IMU give the velocity and position ArduPilot flies on in place of satellites.
+    \item Kept the hardware to \$15 per drone by running the whole system on a Raspberry Pi Zero 2 W, shipped as a sealed product that operators calibrate in the field and that refuses to arm until the setup is safe.
 \end{itemize}
 
-\project{SEXTANT}{long-range navigation by terrain geometry}
+\vspace{0.5em}
+\project{SEXTANT --- Long-Range Terrain Navigation (Rolling Out)}
 \begin{itemize}
-    \item Goal: absolute position and heading without GPS over long range, where odometry alone drifts.
-    \item Techniques: terrain-referenced navigation by geometry rather than appearance, so snow, foliage and sun do not break it. The forward camera's skyline, matched against a terrain model, gives position and heading; downward motion stereo measures the relief below; ArduPilot's EKF fuses both.
+    \item Extended GPS-denied flight from holding position to navigating over long range by fixing absolute position and heading from the terrain itself: the forward camera's skyline is matched against a terrain model, and downward motion stereo reads the relief below.
+    \item Chose terrain geometry over image matching so that navigation survives snow, foliage and changing light, the conditions that defeat appearance-based systems.
 \end{itemize}
 
-\project{ORRERY}{standalone simulator for camera-based flight}
+\vspace{0.5em}
+\project{ORRERY --- Standalone Flight Simulator}
 \begin{itemize}
-    \item Goal: fly camera-based navigation on the desk, with the aircraft's sensor and timing effects, before it flies for real.
-    \item Techniques: a Godot simulator coupled step for step to ArduPilot SITL, with cameras modelled as real sensors. Any SITL build, any camera and the vehicle are set by configuration.
+    \item Cut the cost and risk of flight testing with the simulator in which NADIR and SEXTANT pass their acceptance tests before reaching an aircraft, coupled to ArduPilot SITL with cameras modelled as real sensors.
+    \item Made it independent of our own stack: any ArduPilot SITL build, any camera and any vehicle plug in through configuration alone.
 \end{itemize}
 
-\role{Wix.com}{Principal Software Engineer / Architect}{2017 -- 2026}
+\vspace{1em}
+\role{Wix.com}{Principal Software Engineer / Architect}{Kyiv, Ukraine | 2017 -- 2026}
+\project{Platformization, API Governance \& Engineering Culture}
 \begin{itemize}
-    \item Led Wix's adoption of gRPC and Protobuf as the contract for its internal APIs, the foundation for opening them to third-party developers and the Wix App Market; built the Protobuf linter in the core CI/CD pipeline that every service's API passes, with code and documentation generated from the contract.
-    \item Designed and taught the asynchronous-programming courses and workshops, mandatory for Wix's 1,000+ server engineers, that moved the backend to async code and cut service resource use.
-    \item Interviewed weekly throughout my time at Wix (300+ interviews), at all three stages of the company-wide hiring loop: system design, coding, and the Server Guild deep-dive into a candidate's experience and interests that decides where in the company they fit. Sat on the hiring committees: scored and voted on each candidate and helped shape the new hire's career path.
-    \item Architected the internal serverless platform (App Engine) and built it with a core team of five. It let about 3,000 developers, mostly front-end, ship Node.js services across 2,000+ microservices without touching Kubernetes, service wiring or CI/CD; control plane in Scala and ZIO with typed errors.
-    \item Designed a throughput-based autoscaler beyond what KEDA/HPA offer: it pre-warms capacity before datacenter switches and adjusts CPU and memory live, scaling without downtime.
-    \item Architected the Wix App Market's AI chat agent: retrieval-augmented generation on Vespa, and a bidirectional streaming pipeline from WebSockets to a gRPC server for real-time LLM responses.
-    \item Domains: automated SSL certificate issuance and renewal for 8M+ domains with no manual steps; architected Wix's ICANN-accredited registrar platform and an in-house DNS server; led the migration of the legacy Java domain-management monolith to microservices.
+    \item Laid the technical foundation for opening Wix's internal APIs to third-party developers and the Wix App Market by leading the company-wide adoption of gRPC and Protobuf as the API contract.
+    \item Standardized API design across the engineering organization by building a Protobuf linter into the core CI/CD pipeline that every service passes, with code and documentation generated from the contract.
+    \item Moved the backend to asynchronous code and cut service resource costs by designing and teaching the asynchronous-programming courses and workshops, mandatory for Wix's 1,000+ server engineers.
+    \item Shaped Wix's engineering hiring through 300+ interviews across all three stages of the loop and a vote on the hiring committees, which also set each new hire's career path.
 \end{itemize}
 
-\role{Playtech}{Software Architect / Tech Lead}{2012 -- 2017}
+\vspace{0.5em}
+\project{Internal Serverless Platform (App Engine)}
 \begin{itemize}
-    \item Tech lead of a team of five engineers (a team leader handled management): I set the design, the technical direction and the goals, and ran the team's internal communication. Led the sports-betting platform's migration from a Java EE monolith to a reactive Scala architecture (Scalaz, algebraic domain modeling).
-    \item Real-time streaming held 60M requests/min peaks during the FIFA World Cup over WebSockets and raw sockets, with back-pressured Akka Streams keeping memory bounded under load.
-    \item Cut the bare-metal footprint to a highly available 3-node minimum, with New Relic observability.
-    \item Regulation ruled out the cloud, so I designed a Dynamo-style, eventually consistent key-value store on LevelDB over bare-metal disks, with Akka Cluster gossip for membership and state machines for replica logic; reads are served locally, with no network round-trip.
+    \item Took Kubernetes, service wiring and CI/CD off the hands of about 3,000 developers, mostly front-end, across 2,000+ microservices by architecting Wix's internal serverless platform and building it with a core team of five; control plane in Scala and ZIO with typed errors.
+    \item Delivered zero-downtime scaling with a throughput-based autoscaler that goes beyond KEDA/HPA: it pre-warms capacity before datacenter switches and adjusts CPU and memory live.
 \end{itemize}
 
-\role{UkrCard}{Systems Architect}{2007 -- 2012}
+\vspace{0.5em}
+\project{AI Chat Agent, Domains \& Core Infrastructure}
 \begin{itemize}
-    \item Led the move of every ATM, POS and self-service terminal on the payment network from wired X.25 to wireless TCP/IP, with end-to-end VPN and SSL encryption (2008--2012).
-    \item Fraud-detection assistant (Master's project, 2007--2008): a neural network written from scratch in Java, ensembled with a human-in-the-loop meta-model that learned from operator feedback to cut false positives under severe class imbalance.
+    \item Brought AI assistance to the Wix App Market by architecting its chat agent: retrieval-augmented generation over Vespa, and a bidirectional streaming pipeline from WebSockets to gRPC for real-time LLM responses.
+    \item Made Wix independent of third-party registrars by architecting its ICANN-accredited registrar platform and an in-house DNS server, took SSL for 8M+ domains out of human hands with automated issuance and renewal, and led the migration of the legacy Java domain-management monolith to microservices.
+\end{itemize}
+
+\vspace{1em}
+\role{Playtech}{Software Architect / Tech Lead}{Kyiv, Ukraine | 2012 -- 2017}
+\begin{itemize}
+    \item As tech lead of a team of five (a team leader handled management), set the design, technical direction and goals, and led the sports-betting platform's migration from a Java EE monolith to reactive Scala (Scalaz, algebraic domain modeling).
+    \item Held 60M requests/min peaks during the FIFA World Cup with real-time streaming over WebSockets and raw sockets, kept within bounded memory by back-pressured Akka Streams.
+    \item Cut bare-metal hardware costs by shrinking the deployment to a highly available 3-node minimum, observed through New Relic.
+    \item Kept the platform within regulation that ruled out the cloud by designing a Dynamo-style, eventually consistent key-value store on LevelDB over bare-metal disks, with reads served locally and no network round-trip.
+\end{itemize}
+
+\vspace{1em}
+\role{UkrCard}{Systems Architect}{Kyiv, Ukraine | 2007 -- 2012}
+\begin{itemize}
+    \item Secured the payment network against interception by leading the move of every ATM, POS and self-service terminal from wired X.25 to wireless TCP/IP with end-to-end VPN and SSL encryption (2008--2012).
+    \item Cut costly false positives in fraud detection with a neural network written from scratch in Java and a human-in-the-loop meta-model that learned from operator feedback (Master's project, 2007--2008).
 \end{itemize}
 
 % ================= SKILLS =================
@@ -133,7 +147,7 @@ Ukrainian developer of strike, loitering-munition and cargo UAVs. I joined as th
 
 % ================= EDUCATION =================
 \section*{EDUCATION}
-\textbf{M.Sc. in Cybernetics} | Taras Shevchenko National University of Kyiv, Faculty of Cybernetics. Thesis: Ensuring the Dependability of Transaction Classification in a Payment System.\\[0.3em]
+\textbf{M.Sc. in Cybernetics} | Taras Shevchenko National University of Kyiv, Faculty of Cybernetics. Thesis: Ensuring the Dependability of Transaction Classification in a Payment System.\\[0.8em]
 \textbf{B.Sc. in Applied Mathematics} | Taras Shevchenko National University of Kyiv, Faculty of Cybernetics
 
 % ================= MILITARY & OTHER =================
