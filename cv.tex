@@ -70,7 +70,7 @@ Kyiv, Ukraine |%
 
 % ================= SUMMARY =================
 \section*{SUMMARY}
-Systems architect and engineering leader with 19 years of building production systems at scale, from Wix's developer platform to Playtech's real-time betting engine and UkrCard's payment network. Since 2026 I have led software and autonomy at Applied Technology Collective, a Ukrainian UAV maker, where I designed the GPS-denied navigation its drones now fly in production, along with the flight-controller firmware and simulator behind it. I reason from first principles, breaking a problem down to its physics, mathematics and computing limits rather than copying existing frameworks. I work AI-native: I own the architecture, the mathematics and the acceptance criteria, and AI coding agents are my implementation team.
+Systems architect and engineering leader with 19 years of building production systems at scale, from Wix's developer platform to Playtech's real-time betting engine and UkrCard's payment network. Since 2026 I have led software and autonomy at Applied Technology Collective, a Ukrainian UAV maker, where I designed the GPS-denied navigation its drones fly on, along with the flight-controller firmware and simulator behind it. I reason from first principles, breaking a problem down to its physics, mathematics and computing limits rather than copying existing frameworks. I work AI-native: I own the architecture, the mathematics and the acceptance criteria, and AI coding agents are my implementation team.
 
 % ================= EXPERIENCE =================
 \section*{EXPERIENCE}
@@ -78,14 +78,14 @@ Systems architect and engineering leader with 19 years of building production sy
 \role{Applied Technology Collective}{Head of Software \& Autonomy}{Kyiv, Ukraine | 2026 -- Present}
 Ukrainian developer of strike, loitering-munition and cargo UAVs. I joined as the only software engineer, built the software and autonomy team from scratch and hired its first two engineers. NADIR, SEXTANT and ORRERY are my own IP, used by the company; code walkthrough on request.
 
-\project{NADIR --- GPS-Denied Position Hold (In Production)}
+\project{NADIR --- Visual-Inertial Odometry}
 \begin{itemize}
-    \item Made the company's drones hold position without GPS: visual-inertial navigation turns one downward camera and the autopilot's motion sensors into the position and velocity that the autopilot flies on in place of satellites.
+    \item Made the company's drones fly without GPS: visual-inertial odometry turns one downward camera and the autopilot's motion sensors into the position and velocity it would otherwise take from satellites, both for holding position and for guided flight.
     \item Kept the added hardware to \$15 per drone and shipped it as a sealed product: operators calibrate it in the field, and it will not let the drone arm until the setup is safe.
 \end{itemize}
 
 \vspace{0.5em}
-\project{SEXTANT --- Long-Range Terrain Navigation (Rolling Out)}
+\project{SEXTANT --- Long-Range Terrain Navigation}
 \begin{itemize}
     \item Extended GPS-denied flight to long range: the drone finds its absolute position and heading by matching the shape of the surrounding terrain against a terrain model, which keeps working in the snow, foliage and changing light that defeat matching by appearance.
 \end{itemize}
