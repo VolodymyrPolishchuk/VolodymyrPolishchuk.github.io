@@ -80,51 +80,53 @@ Ukrainian developer of strike, loitering-munition and cargo UAVs. I joined as th
 
 \project{NADIR --- Visual-Inertial Odometry}
 \begin{itemize}
-    \item Made the company's drones fly without GPS on \$15 of added hardware: visual-inertial odometry from one downward camera gives each drone the position and velocity it would otherwise take from satellites, both for holding position and for guided flight.
+    \item Built GPS-denied navigation for the company's drones using visual-inertial odometry from one downward camera, so each drone holds position and flies in guided mode without satellites, on \$15 of added hardware.
 \end{itemize}
 
 \vspace{0.5em}
 \project{SEXTANT --- Long-Range Terrain Navigation}
 \begin{itemize}
-    \item Extended GPS-denied flight to long range: the drone finds its absolute position and heading by matching the shape of the surrounding terrain against a terrain model, which keeps working in the snow, foliage and changing light that defeat matching by appearance.
+    \item Extended GPS-denied flight to long range by matching the shape of the surrounding terrain against a terrain model for absolute position and heading, so navigation keeps working in snow, foliage and changing light, where matching camera images fails.
 \end{itemize}
 
 \vspace{0.5em}
 \project{ORRERY --- Standalone Flight Simulator}
 \begin{itemize}
-    \item Cut the cost and risk of flight testing with a simulator in which NADIR and SEXTANT must pass their acceptance tests before they reach a real drone; any ArduPilot version, camera or vehicle is set up by configuration, without code changes.
+    \item Built a flight simulator that runs the real ArduPilot flight code, in which NADIR and SEXTANT must pass their acceptance tests before they reach a real drone, cutting the cost and risk of flight testing.
 \end{itemize}
 
 \vspace{1em}
 \role{Wix.com}{Principal Software Engineer / Architect}{Kyiv, Ukraine | 2017 -- 2026}
 \project{Platformization \& Engineering Culture}
 \begin{itemize}
-    \item Laid the groundwork for opening Wix's internal APIs to third-party developers by leading company-wide adoption of a single API standard, enforced automatically for every service.
-    \item Moved Wix's backend to asynchronous code, cutting its resource costs, through courses and workshops I designed and taught, mandatory for all 1,000+ server engineers.
-    \item Shaped Wix's engineering hiring through 300+ interviews and a vote on its hiring committees.
+    \item Led company-wide adoption of a single API standard, enforced automatically for every service, laying the groundwork for opening Wix's internal APIs to third-party developers and the App Market.
+    \item Moved Wix's backend to asynchronous programming through mandatory courses and workshops I designed and taught for its 1,000+ server engineers. The shift cut the backend's operational resource costs and let its microservices scale further.
+    \item Interviewed 300+ engineering candidates and voted on Wix's hiring committees, setting the bar for who joined engineering.
 \end{itemize}
 
 \vspace{0.5em}
 \project{Platforms \& Infrastructure}
 \begin{itemize}
-    \item Freed about 3,000 developers from managing infrastructure by architecting Wix's internal serverless platform, built with a core team of five; it serves 2,000+ microservices and scales without downtime.
-    \item Brought AI assistance to the Wix App Market by architecting its chat agent.
-    \item Made Wix independent of third-party registrars with its own accredited domain registrar and DNS, automated SSL certificates for 8M+ domains, and led the move of domain management from a legacy monolith to microservices.
+    \item Architected Wix's internal serverless platform with a core team of five, freeing about 3,000 developers across 2,000+ microservices from managing infrastructure.
+    \item Designed the Wix App Market's AI chat agent, grounded in the App Market's own catalogue, so businesses on Wix find the apps their sites need by asking instead of searching.
+    \item Built Wix's own accredited domain registrar and DNS, making Wix independent of third-party registrars.
+    \item Automated SSL certificates for 8M+ domains, keeping every customer's domain secure with no manual renewals.
+    \item Led the migration of domain management from a legacy monolith to microservices, stabilizing the system behind 8M+ domains.
 \end{itemize}
 
 \vspace{1em}
 \role{Playtech}{Software Architect / Tech Lead}{Kyiv, Ukraine | 2012 -- 2017}
 \begin{itemize}
-    \item Led a team of five as tech lead, owning the design and technical direction, and moved the sports-betting platform from a monolith to a reactive architecture.
-    \item Kept the platform up through FIFA World Cup peaks of 60M requests per minute while cutting hardware costs, with a design that stays highly available on as few as three servers.
-    \item Met regulation that ruled out the cloud by designing a distributed data store that runs on the company's own servers and serves reads locally.
+    \item Led a team of five as tech lead and moved the sports-betting platform from a monolith to a reactive architecture that carried FIFA World Cup peaks of 60M requests per minute.
+    \item Redesigned the deployment to stay highly available on as few as three servers, cutting hardware costs.
+    \item Designed a distributed database running on the company's own servers, keeping the platform within regulation that ruled out the cloud.
 \end{itemize}
 
 \vspace{1em}
 \role{UkrCard}{Systems Architect}{Kyiv, Ukraine | 2007 -- 2012}
 \begin{itemize}
-    \item Secured the payment network by leading the move of every ATM, POS and self-service terminal from legacy wired lines to encrypted wireless connections.
-    \item Cut costly false positives in fraud detection with a neural-network assistant that learned from operator feedback (Master's project).
+    \item Led the move of every ATM, POS and self-service terminal from legacy wired lines to encrypted wireless connections, securing the payment network.
+    \item Built a neural-network assistant for fraud detection that learned from operator feedback, cutting costly false positives (Master's project).
 \end{itemize}
 
 % ================= SKILLS =================
