@@ -93,7 +93,10 @@
   try {
     pdfjsLib.GlobalWorkerOptions.workerSrc =
       'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-    const pdf = await pdfjsLib.getDocument('cv.pdf').promise;
+    // Revalidate every load: Pages caches for 10 min, so a new CV would show stale.
+    const res = await fetch('cv.pdf', { cache: 'no-cache' });
+    if (!res.ok) throw new Error(res.status);
+    const pdf = await pdfjsLib.getDocument({ data: new Uint8Array(await res.arrayBuffer()) }).promise;
     const pages = [];
     for (let n = 1; n <= pdf.numPages; n++) pages.push(await pdf.getPage(n));
 
