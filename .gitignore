@@ -1,0 +1,11 @@
+# Private copy with the phone number: never published
+cv-private.tex
+cv-private.pdf
+
+# LaTeX intermediates
+*.aux
+*.log
+*.out
+*.synctex.gz
+
+.DS_Store

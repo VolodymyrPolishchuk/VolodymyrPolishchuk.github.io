@@ -1,0 +1,149 @@
+\documentclass[11pt,a4paper]{article}
+
+% --- Font and Encoding ---
+\usepackage[T1]{fontenc}
+\usepackage[scaled=0.92]{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+
+% --- Page Layout ---
+\usepackage[a4paper, left=1.9cm, right=1.9cm, top=1.6cm, bottom=1.6cm]{geometry}
+\usepackage{needspace}
+\pagestyle{empty}
+
+% --- Colors ---
+\usepackage{xcolor}
+\definecolor{headercolor}{RGB}{44, 62, 80}
+\definecolor{linkcolor}{RGB}{30, 80, 150}
+\definecolor{muted}{RGB}{95, 105, 115}
+
+% --- Private details: cv-private.tex (not published) defines \phone, then \input{cv} ---
+\usepackage{etoolbox}
+\providecommand{\phone}{}
+
+% --- Hyperlinks ---
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=linkcolor,
+    urlcolor=linkcolor,
+    pdftitle={Volodymyr Polishchuk - CV},
+    pdfauthor={Volodymyr Polishchuk},
+    pdfsubject={Head of Software and Autonomy, Systems Architect, GPS-denied UAV navigation},
+    pdfkeywords={CTO, tech lead, UAV, GPS-denied navigation, visual-inertial odometry, ArduPilot, Rust},
+}
+
+% --- Formatting Packages ---
+\usepackage{titlesec}
+\usepackage{enumitem}
+
+% --- Section Styling ---
+\titleformat{\section}{\large\bfseries\color{headercolor}}{}{0em}{}[\titlerule]
+\titlespacing{\section}{0pt}{1.6ex}{0.9ex}
+
+% --- Paragraphs: ragged right, no hyphenated words ---
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.35em}
+\raggedright
+\hyphenpenalty=10000
+\exhyphenpenalty=10000
+\widowpenalty=10000
+\clubpenalty=10000
+\setlist[itemize]{leftmargin=1.1em, nosep, topsep=0.15em, itemsep=0.22em}
+
+% \role{Company}{Title}{Dates}
+\newcommand{\role}[3]{%
+  \Needspace*{5\baselineskip}\vspace{0.5em}%
+  {\bfseries\color{headercolor}#1}\ |\ {\bfseries #2}\hfill{\color{muted}#3}\par}
+% \project{Name}{what it is}
+\newcommand{\project}[2]{%
+  \Needspace*{3\baselineskip}\vspace{0.15em}%
+  {\bfseries #1}\ifstrempty{#2}{}{ --- #2}\par}
+
+\begin{document}
+
+% ================= HEADER =================
+\begin{center}
+{\LARGE \textbf{VOLODYMYR POLISHCHUK}}\\[0.35em]
+{\large Head of Software \& Autonomy | Systems Architect | GPS-Denied UAV Navigation}\\[0.35em]
+Kyiv, Ukraine |%
+\ifdefempty{\phone}{}{ \phone\ |}%
+{} \href{mailto:v.s.polishchuk@proton.me}{v.s.polishchuk@proton.me} |%
+{} \href{https://volodymyrpolishchuk.github.io}{volodymyrpolishchuk.github.io}
+\end{center}
+
+% ================= SUMMARY =================
+\section*{SUMMARY}
+Systems architect and tech lead with 19 years in production engineering: Wix's serverless developer platform, used by about 3,000 developers across 2,000+ microservices; a real-time betting engine taking 1M requests/s at peak at Playtech; and payment-network infrastructure at UkrCard. Since 2026 I have headed software and autonomy at Applied Technology Collective, a Ukrainian UAV developer. I joined as its only software engineer, built GPS-denied navigation, now in production, that runs on a \$15 companion computer, with its own flight-controller firmware and simulator, and hired the team. I start from the physics and the measurements, not from frameworks. I build AI-native: I own the architecture, the estimation math and the acceptance tests, and direct AI coding agents as the implementation team.
+
+% ================= EXPERIENCE =================
+\section*{EXPERIENCE}
+
+\role{Applied Technology Collective}{Head of Software \& Autonomy}{2026 -- Present}
+Ukrainian developer of strike, loitering-munition and cargo UAVs. I joined as the only software engineer, built the software and autonomy function, and hired two engineers. NADIR is in production and SEXTANT is rolling out; both are my own IP, which the company uses. Code walkthrough on request.
+
+\project{Engineering process}{}
+\begin{itemize}
+    \item AI-native delivery: I set the architecture, the estimation math, the interfaces and the acceptance criteria; AI coding agents (Claude Code) write the code under my review. Every change is gated by unit and property tests, with replays of recorded flights and simulator flights as acceptance, and I debug from flight logs; the root causes below were found that way. 1,400+ commits in four months across four repositories.
+    \item Simulation as the acceptance test: I built the simulator that NADIR and SEXTANT both fly in, Godot 4 and ArduPilot SITL in lockstep. Cameras are modelled as sensors (rolling shutter, motion blur, auto-exposure, noise; OV5647, IMX219 and IMX296 presets) over 15 cm orthophoto terrain, and frames carry the real driver's headers and timestamps, so timing bugs reproduce on the desk.
+\end{itemize}
+
+\project{NADIR}{position hold for ArduPilot from one downward camera}
+\begin{itemize}
+    \item Shipped a product, not a demo: a Rust daemon on a Raspberry Pi Zero 2 W turns camera frames into metric body velocity at 20 Hz and a feature-anchored position fix, both fused by ArduPilot's EKF3. Sealed read-only SD image, HTTPS web console, in-field calibration from QGroundControl, and a pre-arm gate that refuses flight until lens, latencies and autopilot parameters check out. 25 releases in 6 weeks.
+    \item Vision pipeline: FAST corners and gyro-seeded pyramidal KLT, de-rotation of each corner at its own rolling-shutter row time, a RANSAC velocity solve whose sigma tracks the true error, and a BRIEF keyframe anchor matched on gravity-levelled corners. In simulation: 2\% position error over a 385 m flight; 40 m hovers hold within 0.6 m.
+    \item Tightly coupled visual-inertial odometry (MSCKF, the OpenVINS family) estimating velocity, attitude, IMU biases, camera--IMU time offset and feature depths: 3.6\% and 7.0\% drift of distance on recorded flights, against OpenVINS's 4.6\% and 4.0\% on the same data, within a Pi Zero 2 W's frame budget.
+    \item Root-caused instabilities to physics rather than tuning them away: drone rocking to a 50 ms gyro/image timing offset; a cruise scale runaway to a 1--2.5\textdegree{} attitude-levelling bias feeding back through the velocity; heading swings to ArduPilot's backup attitude estimator reading braking as tilt (heading-induced position error 9--76 m down to 1--5.5 m over five flights). Built a field latency bench that measures camera, IMU and link delays on the aircraft.
+    \item Own ArduCopter 4.7.1 build for the SpeedyBee F405 (1 MB flash): enables the EKF3 body-odometry and external-navigation fusion that stock 1 MB builds leave out, fixes a PosHold bug that let stock 4.7 drift downwind after any stick input, and fits in 932 of 976 KB. The simulator runs the same source under a feature-parity check.
+    \item Migrated the daemon from C to Rust as a strangler migration, one module at a time, the drone flyable after every step. Coordinate frames and units became types, closing the class of bug that had cost flights. 38k lines of Rust, 418 unit tests, 41 property-test suites, Miri in CI.
+\end{itemize}
+
+\project{SEXTANT}{long-range navigation by terrain geometry}
+\begin{itemize}
+    \item Absolute position and heading without GPS by matching geometry instead of appearance: the forward camera's skyline against a terrain model gives heading and position, downward motion-stereo gives relief, fused into EKF3 on a lane of their own. Over a real 15 km Carpathian corridor (Copernicus GLO-30 terrain, simulated flight): 39 m RMS and 0.53\textdegree{} heading without a magnetometer, re-locking 900 m after a cloud blackout, where the INS alone drifts past 300 m.
+    \item Prototyped and retired SILO, satellite-image matching with MobileNetV3 embeddings on an edge NPU: appearance changes with snow, foliage and sun, terrain geometry does not. Decisions recorded as ADRs.
+\end{itemize}
+
+\role{Wix.com}{Principal Software Engineer / Architect}{2017 -- 2026}
+\begin{itemize}
+    \item Led Wix's adoption of gRPC and Protobuf as the contract for its internal APIs, the foundation for opening them to third-party developers and the Wix App Market; built the Protobuf linter in the core CI/CD pipeline that every service's API passes, with code and documentation generated from the contract.
+    \item Designed and taught the asynchronous-programming courses and workshops, mandatory for Wix's 1,000+ server engineers, that moved the backend to async code and cut service resource use.
+    \item Interviewed weekly throughout my time at Wix (300+ interviews), at all three stages of the company-wide hiring loop: system design, coding, and the Server Guild deep-dive into a candidate's experience and interests that decides where in the company they fit. Sat on the hiring committees: scored and voted on each candidate and helped shape the new hire's career path.
+    \item Architected the internal serverless platform (App Engine) and built it with a core team of five. It let about 3,000 developers, mostly front-end, ship Node.js services across 2,000+ microservices without touching Kubernetes, service wiring or CI/CD; control plane in Scala and ZIO with typed errors.
+    \item Designed a throughput-based autoscaler beyond what KEDA/HPA offer: it pre-warms capacity before datacenter switches and adjusts CPU and memory live, scaling without downtime.
+    \item Architected the Wix App Market's AI chat agent: retrieval-augmented generation on Vespa, and a bidirectional streaming pipeline from WebSockets to a gRPC server for real-time LLM responses.
+    \item Domains: automated SSL certificate issuance and renewal for 8M+ domains with no manual steps; architected Wix's ICANN-accredited registrar platform and an in-house DNS server; led the migration of the legacy Java domain-management monolith to microservices.
+\end{itemize}
+
+\role{Playtech}{Software Architect / Tech Lead}{2012 -- 2017}
+\begin{itemize}
+    \item Tech lead of a team of five engineers (a team leader handled management): I set the design, the technical direction and the goals, and ran the team's internal communication. Led the sports-betting platform's migration from a Java EE monolith to a reactive Scala architecture (Scalaz, algebraic domain modeling).
+    \item Real-time streaming held 60M requests/min peaks during the FIFA World Cup over WebSockets and raw sockets, with back-pressured Akka Streams keeping memory bounded under load.
+    \item Cut the bare-metal footprint to a highly available 3-node minimum, with New Relic observability.
+    \item Regulation ruled out the cloud, so I designed a Dynamo-style, eventually consistent key-value store on LevelDB over bare-metal disks, with Akka Cluster gossip for membership and state machines for replica logic; reads are served locally, with no network round-trip.
+\end{itemize}
+
+\role{UkrCard}{Systems Architect}{2007 -- 2012}
+\begin{itemize}
+    \item Led the move of every ATM, POS and self-service terminal on the payment network from wired X.25 to wireless TCP/IP, with end-to-end VPN and SSL encryption (2008--2012).
+    \item Fraud-detection assistant (Master's project, 2007--2008): a neural network written from scratch in Java, ensembled with a human-in-the-loop meta-model that learned from operator feedback to cut false positives under severe class imbalance.
+\end{itemize}
+
+% ================= SKILLS =================
+\section*{SKILLS}
+\textbf{Autonomy:} visual and visual-inertial odometry (MSCKF), EKF sensor fusion, camera calibration and timing, terrain-referenced navigation, ArduPilot (EKF3, firmware, SITL), MAVLink.\\
+\textbf{Languages:} Rust, C, Scala (ZIO, Akka, Scalaz), Java, Python, Node.js.\\
+\textbf{Systems:} embedded Linux on ARM, real-time pipelines, Kubernetes, gRPC/Protobuf, distributed storage, CI/CD, Godot.\\
+\textbf{AI:} directing AI coding agents, RAG, neural networks from first principles.
+
+% ================= EDUCATION =================
+\section*{EDUCATION}
+\textbf{M.Sc. in Cybernetics} | Taras Shevchenko National University of Kyiv, Faculty of Cybernetics. Thesis: Ensuring the Dependability of Transaction Classification in a Payment System.\\[0.3em]
+\textbf{B.Sc. in Applied Mathematics} | Taras Shevchenko National University of Kyiv, Faculty of Cybernetics
+
+% ================= MILITARY & OTHER =================
+\section*{MILITARY \& OTHER QUALIFICATIONS}
+\textbf{Armed Forces of Ukraine (reserve):} Junior Lieutenant, military specialty 708200: operation, tactical deployment and maintenance of air-defense radar systems.\\
+\textbf{IYT Skipper} (International Yacht Training): practical navigation.\\
+\textbf{Interests:} world models for robot navigation (V-JEPA, Genesis); basal cognition (Michael Levin); foundations of physics.
+
+\end{document}
