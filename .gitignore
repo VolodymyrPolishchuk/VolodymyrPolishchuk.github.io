@@ -1,6 +1,6 @@
 # Private copy with the phone number: never published
-cv-private.tex
-cv-private.pdf
+cv-v*.tex
+cv-v*.pdf
 
 # LaTeX intermediates
 *.aux
