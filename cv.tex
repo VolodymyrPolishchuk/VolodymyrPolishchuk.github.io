@@ -70,7 +70,7 @@ Kyiv, Ukraine |%
 
 % ================= SUMMARY =================
 \section*{SUMMARY}
-Head of software and autonomy and systems architect with 19 years of designing production infrastructure at scale: Wix's serverless platform for about 3,000 developers, Playtech's real-time betting engine at 1M requests per second, and UkrCard's payment network. Since 2026 I have built the software and autonomy function of Applied Technology Collective, a Ukrainian UAV developer, from zero: GPS-denied navigation now in production on a \$15 companion computer, with its own flight-controller firmware and simulator, and the team behind it. I work from first principles, breaking a problem down to its physical, mathematical and computational realities instead of adopting frameworks by analogy. I build AI-native, owning the architecture, the mathematics and the acceptance criteria and directing AI coding agents as the implementation team.
+Head of software and autonomy and systems architect with 19 years of designing production systems at scale, from Wix's developer platform to Playtech's real-time betting engine and UkrCard's payment network. Since 2026 I have built the software and autonomy function of Applied Technology Collective, a Ukrainian UAV developer, from zero: GPS-denied navigation now in production, with its own flight-controller firmware and simulator, and the team behind it. I work from first principles, breaking a problem down to its physical, mathematical and computational realities instead of adopting frameworks by analogy. I build AI-native, owning the architecture, the mathematics and the acceptance criteria and directing AI coding agents as the implementation team.
 
 % ================= EXPERIENCE =================
 \section*{EXPERIENCE}
@@ -80,69 +80,58 @@ Ukrainian developer of strike, loitering-munition and cargo UAVs. Joined as the 
 
 \project{NADIR --- GPS-Denied Position Hold (In Production)}
 \begin{itemize}
-    \item Freed the company's drones from depending on GPS to hold position with a visual-inertial navigation system: one downward camera and the autopilot's IMU give the velocity and position ArduPilot flies on in place of satellites.
-    \item Kept the hardware to \$15 per drone by running the whole system on a Raspberry Pi Zero 2 W, shipped as a sealed product that operators calibrate in the field and that refuses to arm until the setup is safe.
+    \item Freed the company's drones from depending on GPS to hold position with visual-inertial navigation: one downward camera and the autopilot's IMU give the velocity and position ArduPilot flies on in place of satellites.
+    \item Kept the hardware to \$15 per drone, shipped as a sealed product that operators calibrate in the field and that refuses to arm until the setup is safe.
 \end{itemize}
 
 \vspace{0.5em}
 \project{SEXTANT --- Long-Range Terrain Navigation (Rolling Out)}
 \begin{itemize}
-    \item Extended GPS-denied flight from holding position to navigating over long range by fixing absolute position and heading from the terrain itself: the forward camera's skyline is matched against a terrain model, and downward motion stereo reads the relief below.
-    \item Chose terrain geometry over image matching so that navigation survives snow, foliage and changing light, the conditions that defeat appearance-based systems.
+    \item Extended GPS-denied flight to long range by fixing absolute position and heading from the terrain's geometry, matched against a terrain model, so that navigation survives the snow, foliage and changing light that defeat image matching.
 \end{itemize}
 
 \vspace{0.5em}
 \project{ORRERY --- Standalone Flight Simulator}
 \begin{itemize}
-    \item Cut the cost and risk of flight testing with the simulator in which NADIR and SEXTANT pass their acceptance tests before reaching an aircraft, coupled to ArduPilot SITL with cameras modelled as real sensors.
-    \item Made it independent of our own stack: any ArduPilot SITL build, any camera and any vehicle plug in through configuration alone.
+    \item Cut the cost and risk of flight testing with a simulator in which NADIR and SEXTANT pass their acceptance tests before reaching an aircraft; any ArduPilot SITL build, camera and vehicle plug in through configuration alone.
 \end{itemize}
 
 \vspace{1em}
 \role{Wix.com}{Principal Software Engineer / Architect}{Kyiv, Ukraine | 2017 -- 2026}
-\project{Platformization, API Governance \& Engineering Culture}
+\project{Platformization \& Engineering Culture}
 \begin{itemize}
-    \item Laid the technical foundation for opening Wix's internal APIs to third-party developers and the Wix App Market by leading the company-wide adoption of gRPC and Protobuf as the API contract.
-    \item Standardized API design across the engineering organization by building a Protobuf linter into the core CI/CD pipeline that every service passes, with code and documentation generated from the contract.
-    \item Moved the backend to asynchronous code and cut service resource costs by designing and teaching the asynchronous-programming courses and workshops, mandatory for Wix's 1,000+ server engineers.
-    \item Shaped Wix's engineering hiring through 300+ interviews across all three stages of the loop and a vote on the hiring committees, which also set each new hire's career path.
+    \item Laid the foundation for opening Wix's internal APIs to third-party developers and the App Market by leading the company-wide adoption of one API contract standard, enforced in the pipeline every service passes.
+    \item Moved the backend to asynchronous code and cut its resource costs through courses and workshops I designed and taught, mandatory for Wix's 1,000+ server engineers.
+    \item Shaped Wix's engineering hiring through 300+ interviews and a vote on the hiring committees.
 \end{itemize}
 
 \vspace{0.5em}
-\project{Internal Serverless Platform (App Engine)}
+\project{Platforms \& Infrastructure}
 \begin{itemize}
-    \item Took Kubernetes, service wiring and CI/CD off the hands of about 3,000 developers, mostly front-end, across 2,000+ microservices by architecting Wix's internal serverless platform and building it with a core team of five; control plane in Scala and ZIO with typed errors.
-    \item Delivered zero-downtime scaling with a throughput-based autoscaler that goes beyond KEDA/HPA: it pre-warms capacity before datacenter switches and adjusts CPU and memory live.
-\end{itemize}
-
-\vspace{0.5em}
-\project{AI Chat Agent, Domains \& Core Infrastructure}
-\begin{itemize}
-    \item Brought AI assistance to the Wix App Market by architecting its chat agent: retrieval-augmented generation over Vespa, and a bidirectional streaming pipeline from WebSockets to gRPC for real-time LLM responses.
-    \item Made Wix independent of third-party registrars by architecting its ICANN-accredited registrar platform and an in-house DNS server, took SSL for 8M+ domains out of human hands with automated issuance and renewal, and led the migration of the legacy Java domain-management monolith to microservices.
+    \item Took infrastructure off the hands of about 3,000 developers across 2,000+ microservices by architecting Wix's internal serverless platform, built with a core team of five and scaling without downtime.
+    \item Brought AI assistance to the Wix App Market by architecting its retrieval-augmented chat agent.
+    \item Made Wix independent of third-party registrars with its own ICANN-accredited registrar and DNS, automated SSL for 8M+ domains, and led domain management's move from a legacy monolith to microservices.
 \end{itemize}
 
 \vspace{1em}
 \role{Playtech}{Software Architect / Tech Lead}{Kyiv, Ukraine | 2012 -- 2017}
 \begin{itemize}
-    \item As tech lead of a team of five (a team leader handled management), set the design, technical direction and goals, and led the sports-betting platform's migration from a Java EE monolith to reactive Scala (Scalaz, algebraic domain modeling).
-    \item Held 60M requests/min peaks during the FIFA World Cup with real-time streaming over WebSockets and raw sockets, kept within bounded memory by back-pressured Akka Streams.
-    \item Cut bare-metal hardware costs by shrinking the deployment to a highly available 3-node minimum, observed through New Relic.
-    \item Kept the platform within regulation that ruled out the cloud by designing a Dynamo-style, eventually consistent key-value store on LevelDB over bare-metal disks, with reads served locally and no network round-trip.
+    \item As tech lead of a team of five (a team leader handled management), set the design, technical direction and goals, and led the betting platform's migration from a monolith to a reactive architecture.
+    \item Held 60M requests/min peaks during the FIFA World Cup with real-time streaming, on a highly available 3-node minimum that cut hardware costs.
+    \item Kept the platform within regulation that ruled out the cloud by designing a distributed key-value store on bare metal that serves reads locally.
 \end{itemize}
 
 \vspace{1em}
 \role{UkrCard}{Systems Architect}{Kyiv, Ukraine | 2007 -- 2012}
 \begin{itemize}
-    \item Secured the payment network against interception by leading the move of every ATM, POS and self-service terminal from wired X.25 to wireless TCP/IP with end-to-end VPN and SSL encryption (2008--2012).
-    \item Cut costly false positives in fraud detection with a neural network written from scratch in Java and a human-in-the-loop meta-model that learned from operator feedback (Master's project, 2007--2008).
+    \item Secured the payment network by leading the move of every ATM, POS and self-service terminal from wired X.25 to encrypted wireless TCP/IP.
+    \item Cut costly false positives in fraud detection with a neural-network assistant that learned from operator feedback (Master's project).
 \end{itemize}
 
 % ================= SKILLS =================
 \section*{SKILLS}
-\textbf{Autonomy:} visual and visual-inertial odometry, EKF sensor fusion, camera calibration and timing, terrain-referenced navigation, ArduPilot (EKF3, firmware, SITL), MAVLink.\\
-\textbf{Languages:} Rust, C, Scala (ZIO, Akka, Scalaz), Java, Python, Node.js.\\
-\textbf{Systems:} embedded Linux on ARM, real-time pipelines, Kubernetes, gRPC/Protobuf, distributed storage, CI/CD, Godot.\\
+\textbf{Autonomy:} visual-inertial navigation, sensor fusion, terrain-referenced navigation, ArduPilot, MAVLink.\\
+\textbf{Engineering:} Rust, C, Scala, Java, Python; embedded Linux, distributed systems, Kubernetes, gRPC.\\
 \textbf{AI:} RAG, LLM applications, neural networks from first principles.
 
 % ================= EDUCATION =================
