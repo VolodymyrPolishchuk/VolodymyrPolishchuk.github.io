@@ -42,44 +42,89 @@
     color: var(--ink);
     font: 16px/1.5 "Helvetica Neue", Helvetica, Arial, system-ui, sans-serif;
   }
-  main { max-width: 920px; margin: 0 auto; padding: 44px 16px 48px; }
-  header { text-align: center; margin-bottom: 28px; }
-  h1 { margin: 0; font-size: 2rem; letter-spacing: 0.04em; color: var(--head); text-transform: uppercase; }
-  .role { margin: 6px 0 0; font-size: 1.1rem; }
-  .contact { margin: 8px 0 0; color: var(--muted); }
+  .bar { position: sticky; top: 0; z-index: 1; background: var(--bg); border-bottom: 1px solid var(--rule); }
+  .bar-inner {
+    max-width: 920px; margin: 0 auto; padding: 10px 16px;
+    display: flex; align-items: center; justify-content: space-between; gap: 8px 16px; flex-wrap: wrap;
+  }
+  h1 { margin: 0; font-size: 1rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--head); }
+  nav { display: flex; align-items: center; gap: 16px; font-size: 0.95rem; }
   a { color: var(--link); text-decoration: none; }
   a:hover { text-decoration: underline; }
-  .actions { margin-top: 22px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-  .btn { display: inline-block; padding: 10px 20px; border-radius: 6px; font-weight: 600; }
-  .btn:hover { text-decoration: none; }
-  .primary { background: var(--btn-bg); color: var(--btn-ink); }
-  .secondary { border: 1px solid var(--rule); }
-  .viewer { background: var(--card); border: 1px solid var(--rule); border-radius: 8px; overflow: hidden; }
-  .viewer object { display: block; width: 100%; height: 88vh; min-height: 640px; }
+  .btn { padding: 7px 14px; border-radius: 6px; font-weight: 600; background: var(--btn-bg); color: var(--btn-ink); }
+  .btn:hover { text-decoration: none; opacity: 0.9; }
+  main { max-width: 920px; margin: 0 auto; padding: 20px 16px 48px; }
+  .pages { display: grid; gap: 16px; }
+  .pages canvas {
+    display: block; width: 100%; height: auto; background: #fff;
+    border: 1px solid var(--rule); border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  }
   .fallback { margin: 0; padding: 32px 16px; text-align: center; color: var(--muted); }
   @media (max-width: 640px) {
-    main { padding-top: 32px; }
-    h1 { font-size: 1.6rem; }
-    .viewer { display: none; }
+    .bar { position: static; }
+    main { padding-top: 12px; }
+    .pages { gap: 10px; }
   }
 </style>
 </head>
 <body>
-<main>
-  <header>
+<header class="bar">
+  <div class="bar-inner">
     <h1>Volodymyr Polishchuk</h1>
-    <p class="role">Head of Software &amp; Autonomy · Systems Architect · GPS-Denied UAV Navigation</p>
-    <p class="contact">Kyiv, Ukraine · <a href="mailto:v.s.polishchuk@proton.me">v.s.polishchuk@proton.me</a></p>
-    <div class="actions">
-      <a class="btn primary" href="cv.pdf">Open CV (PDF)</a>
-      <a class="btn secondary" href="cv.pdf" download="Volodymyr-Polishchuk-CV.pdf">Download</a>
-    </div>
-  </header>
-  <div class="viewer">
-    <object data="cv.pdf#view=FitH" type="application/pdf" aria-label="CV">
-      <p class="fallback">This browser can't show the PDF inline. <a href="cv.pdf">Open the CV</a>.</p>
-    </object>
+    <nav>
+      <a href="mailto:v.s.polishchuk@proton.me">Email</a>
+      <a href="cv.pdf">Open PDF</a>
+      <a class="btn" href="cv.pdf" download="Volodymyr-Polishchuk-CV.pdf">Download</a>
+    </nav>
+  </div>
+</header>
+<main>
+  <div id="pages" class="pages" role="img" aria-label="CV, rendered from cv.pdf">
+    <noscript><p class="fallback"><a href="cv.pdf">Open the CV (PDF)</a></p></noscript>
   </div>
 </main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"
+        integrity="sha384-/1qUCSGwTur9vjf/z9lmu/eCUYbpOTgSjmpbMQZ1/CtX2v/WcAIKqRv+U1DUCG6e"
+        crossorigin="anonymous"></script>
+<script>
+(async () => {
+  const box = document.getElementById('pages');
+  try {
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+      'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    const pdf = await pdfjsLib.getDocument('cv.pdf').promise;
+    const pages = [];
+    for (let n = 1; n <= pdf.numPages; n++) pages.push(await pdf.getPage(n));
+
+    // Re-rendered on width change; a newer render supersedes one in flight.
+    let generation = 0, renderedWidth = 0;
+    const render = async () => {
+      const width = box.clientWidth;
+      if (width === renderedWidth) return;
+      const mine = ++generation;
+      const dpr = window.devicePixelRatio || 1;
+      const canvases = [];
+      for (const page of pages) {
+        const scale = width / page.getViewport({ scale: 1 }).width * dpr;
+        const viewport = page.getViewport({ scale });
+        const canvas = document.createElement('canvas');
+        canvas.width = Math.floor(viewport.width);
+        canvas.height = Math.floor(viewport.height);
+        await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
+        if (mine !== generation) return;
+        canvases.push(canvas);
+      }
+      box.replaceChildren(...canvases);
+      renderedWidth = width;
+    };
+    await render();
+    let timer;
+    addEventListener('resize', () => { clearTimeout(timer); timer = setTimeout(render, 150); });
+  } catch (e) {
+    box.innerHTML = '<p class="fallback">The CV could not be shown here. <a href="cv.pdf">Open the PDF</a>.</p>';
+  }
+})();
+</script>
 </body>
 </html>
