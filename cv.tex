@@ -81,31 +81,20 @@ Systems architect and tech lead with 19 years in production engineering: Wix's s
 \role{Applied Technology Collective}{Head of Software \& Autonomy}{2026 -- Present}
 Ukrainian developer of strike, loitering-munition and cargo UAVs. I joined as the only software engineer, built the software and autonomy function, and hired two engineers. NADIR is in production, SEXTANT is rolling out, and ORRERY is the standalone simulator both are tested in. All three are my own IP, which the company uses. Code walkthrough on request.
 
-\project{Engineering process}{}
-\begin{itemize}
-    \item AI-native delivery: I set the architecture, the estimation math, the interfaces and the acceptance criteria; AI coding agents (Claude Code) write the code under my review. Every change is gated by unit and property tests, with replays of recorded flights and simulator flights as acceptance, and I debug from flight logs; the root causes below were found that way. 1,400+ commits in four months across four repositories.
-\end{itemize}
-
 \project{NADIR}{position hold for ArduPilot from one downward camera}
 \begin{itemize}
-    \item Shipped a product, not a demo: a Rust daemon on a Raspberry Pi Zero 2 W turns camera frames into metric body velocity at 20 Hz and a feature-anchored position fix, both fused by ArduPilot's EKF3. Sealed read-only SD image, HTTPS web console, in-field calibration from QGroundControl, and a pre-arm gate that refuses flight until lens, latencies and autopilot parameters check out. 25 releases in 6 weeks.
-    \item Vision pipeline: FAST corners and gyro-seeded pyramidal KLT, de-rotation of each corner at its own rolling-shutter row time, a RANSAC velocity solve whose sigma tracks the true error, and a BRIEF keyframe anchor matched on gravity-levelled corners. In simulation: 2\% position error over a 385 m flight; 40 m hovers hold within 0.6 m.
-    \item Tightly coupled visual-inertial odometry (MSCKF, the OpenVINS family) estimating velocity, attitude, IMU biases, camera--IMU time offset and feature depths: 3.6\% and 7.0\% drift of distance on recorded flights, against OpenVINS's 4.6\% and 4.0\% on the same data, within a Pi Zero 2 W's frame budget.
-    \item Root-caused instabilities to physics rather than tuning them away: drone rocking to a 50 ms gyro/image timing offset; a cruise scale runaway to a 1--2.5\textdegree{} attitude-levelling bias feeding back through the velocity; heading swings to ArduPilot's backup attitude estimator reading braking as tilt (heading-induced position error 9--76 m down to 1--5.5 m over five flights). Built a field latency bench that measures camera, IMU and link delays on the aircraft.
-    \item Own ArduCopter 4.7.1 build for the SpeedyBee F405 (1 MB flash): enables the EKF3 body-odometry and external-navigation fusion that stock 1 MB builds leave out, fixes a PosHold bug that let stock 4.7 drift downwind after any stick input, and fits in 932 of 976 KB. The simulator runs the same source under a feature-parity check.
-    \item Migrated the daemon from C to Rust as a strangler migration, one module at a time, the drone flyable after every step. Coordinate frames and units became types, closing the class of bug that had cost flights. 38k lines of Rust, 418 unit tests, 41 property-test suites, Miri in CI.
+    \item A Rust daemon on a \$15 companion computer turns one downward camera, with the autopilot's IMU, into the drone's velocity and a position anchored to the ground below, which ArduPilot's EKF fuses in place of GPS. Shipped as a product, not a demo: a sealed SD image, a web console, calibration from QGroundControl, and pre-arm checks that refuse flight until the setup is right.
+    \item Approach: every instability is traced to its physical cause rather than tuned away; the daemon moved from C to Rust one module at a time, with the drone flyable after every step; and its own ArduPilot firmware build turns on the vision fusion that stock builds for small flight controllers leave out.
 \end{itemize}
 
 \project{SEXTANT}{long-range navigation by terrain geometry}
 \begin{itemize}
-    \item Absolute position and heading without GPS by matching geometry instead of appearance: the forward camera's skyline against a terrain model gives heading and position, downward motion-stereo gives relief, fused into EKF3 on a lane of their own. Over a real 15 km Carpathian corridor (Copernicus GLO-30 terrain, simulated flight): 39 m RMS and 0.53\textdegree{} heading without a magnetometer, re-locking 900 m after a cloud blackout, where the INS alone drifts past 300 m.
-    \item Prototyped and retired SILO, satellite-image matching with MobileNetV3 embeddings on an edge NPU: appearance changes with snow, foliage and sun, terrain geometry does not. Decisions recorded as ADRs.
+    \item Absolute position and heading without GPS, from the shape of the terrain rather than its appearance: the forward camera's skyline is matched against a terrain model and downward motion stereo measures the relief below, both fused by ArduPilot's EKF. I chose geometry after prototyping and retiring satellite-image matching (SILO): appearance changes with snow, foliage and sun, terrain geometry does not.
 \end{itemize}
 
 \project{ORRERY}{standalone simulator for camera-based flight}
 \begin{itemize}
-    \item A quadcopter simulator in Godot 4, run in lockstep with ArduPilot SITL, in which NADIR and SEXTANT both fly their acceptance tests. Driven entirely by configuration: the scenario file starts any ArduPilot SITL build, stock or custom, and each camera (sensor, lens, mount, frame rate, exposure) and the vehicle's physics come from preset files.
-    \item Cameras are modelled as sensors: rolling shutter, motion blur, auto-exposure and noise, with OV5647, IMX219 and IMX296 presets, over 15 cm orthophoto terrain. Frames carry the real driver's headers and timestamps, so timing bugs reproduce on the desk.
+    \item A Godot flight simulator in which NADIR and SEXTANT fly their acceptance tests. It runs any ArduPilot SITL build and models cameras as real sensors; the SITL, every camera and the vehicle are set entirely by configuration.
 \end{itemize}
 
 \role{Wix.com}{Principal Software Engineer / Architect}{2017 -- 2026}
@@ -135,10 +124,10 @@ Ukrainian developer of strike, loitering-munition and cargo UAVs. I joined as th
 
 % ================= SKILLS =================
 \section*{SKILLS}
-\textbf{Autonomy:} visual and visual-inertial odometry (MSCKF), EKF sensor fusion, camera calibration and timing, terrain-referenced navigation, ArduPilot (EKF3, firmware, SITL), MAVLink.\\
+\textbf{Autonomy:} visual and visual-inertial odometry, EKF sensor fusion, camera calibration and timing, terrain-referenced navigation, ArduPilot (EKF3, firmware, SITL), MAVLink.\\
 \textbf{Languages:} Rust, C, Scala (ZIO, Akka, Scalaz), Java, Python, Node.js.\\
 \textbf{Systems:} embedded Linux on ARM, real-time pipelines, Kubernetes, gRPC/Protobuf, distributed storage, CI/CD, Godot.\\
-\textbf{AI:} directing AI coding agents, RAG, neural networks from first principles.
+\textbf{AI:} RAG, LLM applications, neural networks from first principles.
 
 % ================= EDUCATION =================
 \section*{EDUCATION}
