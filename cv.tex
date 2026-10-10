@@ -79,12 +79,11 @@ Systems architect and tech lead with 19 years in production engineering: Wix's s
 \section*{EXPERIENCE}
 
 \role{Applied Technology Collective}{Head of Software \& Autonomy}{2026 -- Present}
-Ukrainian developer of strike, loitering-munition and cargo UAVs. I joined as the only software engineer, built the software and autonomy function, and hired two engineers. NADIR is in production and SEXTANT is rolling out; both are my own IP, which the company uses. Code walkthrough on request.
+Ukrainian developer of strike, loitering-munition and cargo UAVs. I joined as the only software engineer, built the software and autonomy function, and hired two engineers. NADIR is in production, SEXTANT is rolling out, and ORRERY is the standalone simulator both are tested in. All three are my own IP, which the company uses. Code walkthrough on request.
 
 \project{Engineering process}{}
 \begin{itemize}
     \item AI-native delivery: I set the architecture, the estimation math, the interfaces and the acceptance criteria; AI coding agents (Claude Code) write the code under my review. Every change is gated by unit and property tests, with replays of recorded flights and simulator flights as acceptance, and I debug from flight logs; the root causes below were found that way. 1,400+ commits in four months across four repositories.
-    \item Simulation as the acceptance test: I built the simulator that NADIR and SEXTANT both fly in, Godot 4 and ArduPilot SITL in lockstep. Cameras are modelled as sensors (rolling shutter, motion blur, auto-exposure, noise; OV5647, IMX219 and IMX296 presets) over 15 cm orthophoto terrain, and frames carry the real driver's headers and timestamps, so timing bugs reproduce on the desk.
 \end{itemize}
 
 \project{NADIR}{position hold for ArduPilot from one downward camera}
@@ -101,6 +100,12 @@ Ukrainian developer of strike, loitering-munition and cargo UAVs. I joined as th
 \begin{itemize}
     \item Absolute position and heading without GPS by matching geometry instead of appearance: the forward camera's skyline against a terrain model gives heading and position, downward motion-stereo gives relief, fused into EKF3 on a lane of their own. Over a real 15 km Carpathian corridor (Copernicus GLO-30 terrain, simulated flight): 39 m RMS and 0.53\textdegree{} heading without a magnetometer, re-locking 900 m after a cloud blackout, where the INS alone drifts past 300 m.
     \item Prototyped and retired SILO, satellite-image matching with MobileNetV3 embeddings on an edge NPU: appearance changes with snow, foliage and sun, terrain geometry does not. Decisions recorded as ADRs.
+\end{itemize}
+
+\project{ORRERY}{standalone simulator for camera-based flight}
+\begin{itemize}
+    \item A quadcopter simulator in Godot 4, run in lockstep with ArduPilot SITL, in which NADIR and SEXTANT both fly their acceptance tests. Driven entirely by configuration: the scenario file starts any ArduPilot SITL build, stock or custom, and each camera (sensor, lens, mount, frame rate, exposure) and the vehicle's physics come from preset files.
+    \item Cameras are modelled as sensors: rolling shutter, motion blur, auto-exposure and noise, with OV5647, IMX219 and IMX296 presets, over 15 cm orthophoto terrain. Frames carry the real driver's headers and timestamps, so timing bugs reproduce on the desk.
 \end{itemize}
 
 \role{Wix.com}{Principal Software Engineer / Architect}{2017 -- 2026}
