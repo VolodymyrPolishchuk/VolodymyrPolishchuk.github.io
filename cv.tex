@@ -83,18 +83,20 @@ Ukrainian developer of strike, loitering-munition and cargo UAVs. I joined as th
 
 \project{NADIR}{position hold for ArduPilot from one downward camera}
 \begin{itemize}
-    \item A Rust daemon on a \$15 companion computer turns one downward camera, with the autopilot's IMU, into the drone's velocity and a position anchored to the ground below, which ArduPilot's EKF fuses in place of GPS. Shipped as a product, not a demo: a sealed SD image, a web console, calibration from QGroundControl, and pre-arm checks that refuse flight until the setup is right.
-    \item Approach: every instability is traced to its physical cause rather than tuned away; the daemon moved from C to Rust one module at a time, with the drone flyable after every step; and its own ArduPilot firmware build turns on the vision fusion that stock builds for small flight controllers leave out.
+    \item Goal: reliable position hold without GPS, from one downward camera on a \$15 companion computer.
+    \item Techniques: visual-inertial odometry. Ground features, tracked and corrected for the drone's own rotation, give metric velocity; an anchor on ground features holds position without drift; ArduPilot's EKF fuses both in place of GPS.
 \end{itemize}
 
 \project{SEXTANT}{long-range navigation by terrain geometry}
 \begin{itemize}
-    \item Absolute position and heading without GPS, from the shape of the terrain rather than its appearance: the forward camera's skyline is matched against a terrain model and downward motion stereo measures the relief below, both fused by ArduPilot's EKF. I chose geometry after prototyping and retiring satellite-image matching (SILO): appearance changes with snow, foliage and sun, terrain geometry does not.
+    \item Goal: absolute position and heading without GPS over long range, where odometry alone drifts.
+    \item Techniques: terrain-referenced navigation by geometry rather than appearance, so snow, foliage and sun do not break it. The forward camera's skyline, matched against a terrain model, gives position and heading; downward motion stereo measures the relief below; ArduPilot's EKF fuses both.
 \end{itemize}
 
 \project{ORRERY}{standalone simulator for camera-based flight}
 \begin{itemize}
-    \item A Godot flight simulator in which NADIR and SEXTANT fly their acceptance tests. It runs any ArduPilot SITL build and models cameras as real sensors; the SITL, every camera and the vehicle are set entirely by configuration.
+    \item Goal: fly camera-based navigation on the desk, with the aircraft's sensor and timing effects, before it flies for real.
+    \item Techniques: a Godot simulator coupled step for step to ArduPilot SITL, with cameras modelled as real sensors. Any SITL build, any camera and the vehicle are set by configuration.
 \end{itemize}
 
 \role{Wix.com}{Principal Software Engineer / Architect}{2017 -- 2026}
